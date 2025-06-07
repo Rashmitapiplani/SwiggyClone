@@ -1,51 +1,37 @@
 import React, { useEffect, useState } from "react";
 
+
+
 const Restaurants = () => {
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurantCards, setRestaurantCards] = useState();
 
   useEffect(() => {
-    const fetchRestaurants = async () => {
+    const restData = async () => {
       try {
         const response = await fetch(
           "https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.63270&lng=77.21980&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
         );
         const json = await response.json();
+        console.log(json.data.cards);
+        setRestaurantCards(json.data?.cards[2]);
 
-        console.log("API response:", json);
-
-        // const cards = json?.data?.cards || [];
-
-        // const restaurantCards = cards
-        //   .map((card) => card.card?.card?.gridElements?.infoWithStyle?.restaurants)
-        //   .filter(Boolean)
-        //   .flat();
-
-        // setRestaurants(restaurantCards);
-
+        //console.log(restaurantCards);
       } catch (error) {
-        console.error("Error fetching restaurant data:", error);
+        console.log(error);
       }
     };
-
-    fetchRestaurants();
+    restData();
   }, []);
-  for(let i=0;i<10;i++)
-
-    {
-        console.log(i);
-    }
+  useEffect(() => {
+    console.log(restaurantCards); // ✅ now logs only after restaurantCards is set
+  }, [restaurantCards]);
   return (
-      <div>
-        {restaurants.length === 0 ? (
-          <p>Loading...</p>
-        ) : (
-          <ul>
-            {restaurants.map((restaurant) => (
-              <li key={restaurant.info.id}>{restaurant.info.name}</li>
-            ))}
-          </ul>
-        )}
-      </div>
+    <>
+      <h3>Restaurants </h3>
+      
+      {/* <h3>{restaurantCards.card?.card?.header?.title}</h3> */}
+  
+    </>
   );
 };
 
